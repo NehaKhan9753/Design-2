@@ -103,3 +103,46 @@ class MyHashMap {
     }
 }
 
+
+// The overall time complexity is: O(1) amortized time per operation   Worst-case time for one pop() or peek(): O(n)
+
+//  Space Complexity: O(n) where n is the total number of elements in the queue. Each element is stored in either inSt or outSt, but never in both at the same time.
+
+class MyQueue {
+
+    Stack<Integer> inSt;   // Stack to add (push) new elements
+    Stack<Integer> outSt;  // Stack to remove (pop) elements in correct order
+
+    public MyQueue() {
+        this.inSt = new Stack<>();
+        this.outSt = new Stack<>();
+    }
+
+    // Add element to the end of the queue
+    public void push(int x) {
+        inSt.push(x);  // Just push into the input stack
+    }
+
+    // Remove the element from the front of the queue
+    public int pop() {
+        if (empty()) return -1;  // If both stacks are empty, return -1
+        peek();                  // Make sure outSt has the correct order
+        return outSt.pop();      // Pop from outSt
+    }
+
+    // Get the front element of the queue
+    public int peek() {
+        // If outSt is empty, move all elements from inSt to outSt
+        if (outSt.isEmpty()) {
+            while (!inSt.isEmpty()) {
+                outSt.push(inSt.pop());  // Reverse the order
+            }
+        }
+        return outSt.peek();  // Return the front element
+    }
+
+    // Check if the queue is empty
+    public boolean empty() {
+        return inSt.isEmpty() && outSt.isEmpty();
+    }
+}
